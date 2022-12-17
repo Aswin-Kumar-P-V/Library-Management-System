@@ -1,0 +1,31 @@
+{% extends "base.html"%}
+{% block title%} Register{%endblock%}
+{% block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
+{% block content%}
+<div class='container my-5'>
+    <div class='row'>
+      <div class='col-4'></div>
+      <div class = "col-4">
+        <div class="card"  style="width: 18rem;">
+            <img src="static/registration.gif" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">User Registration</h5>
+            <p class="card-text"><form method = 'POST'>
+                <div class="mb-3">
+                  <label for="uname" class="form-label">User Name</label>
+                  <input type="text" minlength = "8" maxlength = "18" Required class="form-control" id="uname" name="uname" aria-describedby="emailHelp" placeholder = "User name">
+                </div>
+                <div class="mb-3">
+                    <label for="pass" class="form-label">Password</label>
+                    <input type="password" minlength = "8" maxlength = "18" class="form-control" id="pass" name="pass" Required placeholder = "Password">
+                  </div>
+                  <div class="mb-3">
+                    <label for="cpass" class="form-label">Confirm Password</label>
+                    <input type="password" minlength = "8" maxlength = "18" class="form-control" id="cpass" name="cpass" Required placeholder = "Confirm Password">
+                  </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+              </form></p>
+            </div>
+        </div>
+    </div>
+{% endblock%}

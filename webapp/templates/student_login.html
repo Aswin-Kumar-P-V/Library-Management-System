@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Student-Login{%endblock%}
+{% block heading%}{% endblock%}
+{%block nav1%}<a class="nav-item nav-link" id="l_login" href="/login">Librarian</a>{%endblock%}
+{%block nav2%}<a class="nav-item nav-link" id="s_login" href="/student-login">Student</a>{%endblock%}
+{% block content%}
+<div class='container my-5'>
+    <div class='row'>
+      <div class='col-4'></div>
+      <div class = "col-4">
+        <div class="card"  style="width: 18rem;">
+            <img src="static/student.gif" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Student Login</h5>
+            <p class="card-text"><form method = 'POST'>
+                <div class="mb-3">
+                  <label for="uname" class="form-label">User Name</label>
+                  <input type="text" Required class="form-control" minlength = "8" maxlength = "18" id="uname" name="uname" aria-describedby="emailHelp" placeholder = "User Name">
+                </div>
+                <div class="mb-3">
+                    <label for="pass" class="form-label">Password</label>
+                    <input type="password" minlength = "8" maxlength = "18" class="form-control" id="pass" name="pass" Required placeholder ="Password">
+                  </div>
+                <button type="submit" class="btn btn-outline-dark">Login</button>
+              </form></p>
+            </div>
+        </div>
+    </div>
+{% endblock%}

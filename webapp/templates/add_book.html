@@ -1,0 +1,43 @@
+{% extends "base.html"%}
+{% block title%}Add Book{%endblock%}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
+{%block content%}
+<div class = "container my-5">
+    <div class = "row">
+        <div class = "col-4">
+        </div>
+        <div class = "col-4">
+            <div class="card" style="width: 18rem;">
+                <img src="static/AddBook.gif" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Enter Book Details</h5>
+                  <p class="card-text">
+                    <form method = 'POST'>
+                        <div class="mb-3">
+                            <label for="b_name" class="form-label">Book Title</label>
+                            <input type="text" Required class="form-control" maxlength = "200" id="b_name" name="b_name" aria-describedby="emailHelp" placeholder = "Book Title">
+                          </div>
+                          <div class="mb-3">
+                            <label for="b_author" class="form-label">Author</label>
+                            <input type="text" Required class="form-control" maxlength = "200" id="b_author" name="b_author" aria-describedby="emailHelp" placeholder = "Author">
+                          </div>
+                          <div class="mb-3">
+                            <label for="b_publisher" class="form-label">Publisher</label>
+                            <input type="text" Required class="form-control" maxlength = "200" id="b_publisher" name="b_publisher" aria-describedby="emailHelp" placeholder = "Publisher">
+                          </div>
+                          <div class="mb-3">
+                            <label for="b_publication" class="form-label">Publication</label>
+                            <input type="text" Required class="form-control" maxlength = "200" id="b_publication" name="b_publication" aria-describedby="emailHelp" placeholder = "Publication">
+                          </div>
+                          <div class="mb-3">
+                            <label for="b_cat" class="form-label">Category</label>
+                            
+                          </div>
+                          
+                        <button type="submit" class="btn btn-outline-primary">Add Book</button>
+              </form>
+                  </p>
+                  
+                </div>
+              </div>
+{%endblock%}

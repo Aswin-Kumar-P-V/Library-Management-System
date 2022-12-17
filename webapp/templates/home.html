@@ -1,0 +1,29 @@
+{% extends 'base.html' %} 
+{% block title%}Home{% endblock%}
+
+{% block content%}
+<div class='container my-5'>
+    <div class='row'>
+      <div class = "col-4">
+        <div class="card" style="width: 18rem;">
+            <img src="static/Book.gif" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Books</h5>
+              <a href="/add-book" class="btn btn-outline-dark">Add Book</a><br>
+              <a href="#" class="btn btn-outline-dark my-3" >View Books</a><br>
+              <a href="/add-category" class="btn btn-outline-dark">Add Category</a><br>
+            </div>
+          </div>
+        </div>
+        <div class = "col-4 mx-5">
+            <div class="card" style="width: 18rem;">
+                <img src="static/users.gif" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Users</h5>
+                  <a href="/register" class="btn btn-outline-dark">Add User</a><br>
+                  <a href="#" class="btn btn-outline-dark my-3" >View Users</a><br>
+                </div>
+              </div>
+            </div>
+
+{% endblock %}

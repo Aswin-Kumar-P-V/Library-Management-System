@@ -1,0 +1,27 @@
+{% extends "base.html"%}
+{% block title%} Add-Category {% endblock %}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "Home" href="/">Home</a>{%endblock%}
+{%block content%}
+<div class = "container my-3">
+    <div class = "row">
+        <div class = "col-4">
+        </div>
+        <div class = "col-4">
+<div class="card" style="width: 18rem;">
+    <img src="static/category.gif" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Add A new category</h5>
+      <p class="card-text">
+        <form method = 'POST'>
+        <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+        <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <input type="text" Required class="form-control" maxlength = "200" id="category" name="category" aria-describedby="emailHelp" placeholder = "Category">
+          </div></p>
+          <button type="submit" class="btn btn-outline-primary">Add Category</button>
+              </form>
+    </div>
+  </div>
+{%endblock%}
+
