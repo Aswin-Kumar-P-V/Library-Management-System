@@ -19,14 +19,12 @@ def add_book():
 @views.route("/add-category", methods = ["GET", "POST"])
 def add_category():
     if request.method == "POST":
-        new_cat = request.form.get("category")
-        cat = Category.query.filter_by(Category = new_cat).first()
-        if cat:
-            flash("Category already exists", category = "error")
-        else:
-            add_cat = Category(Category = new_cat)
-            db.session.add(add_cat)
-            db.session.commit()
-            flash("Category successfully added", category = "success")
+            new_cat = request.form.get("category")
+            cat = Category.query.filter_by(Category = new_cat).first()
+            if cat:
+                flash("Category already exists", category = "error")
+            else:
+                add_cat = Category(Category = new_cat)
+                add_cat.add()
     return render_template("add_category.html")
     
