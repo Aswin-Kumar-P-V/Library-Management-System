@@ -20,6 +20,11 @@ class User( db.Model, UserMixin):
     username = db.Column(db.String(150), unique = True)
     password = db.Column(db.String(150))
     books = db.relationship("Book")
+    
+    def add(self):
+        db.session.add(self)
+        db.session.commit()
+        flash("Account created", category = "success")
 
 class Category( db.Model):
     id = db.Column(db.Integer, primary_key = True)
