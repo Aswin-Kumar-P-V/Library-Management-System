@@ -26,16 +26,15 @@ def register():
         passw = request.form.get("pass")
         c_pass = request.form.get("cpass")
 
-        user = User.query.filter_by(username = u_name)
+        user = User.query.filter_by(username = u_name).first()
         if passw != c_pass:
             flash("Passwords does not match!!", category="error")
         elif user:
             flash("User already exists", category= "error")
         else:
             new_user = User(username = u_name, password = passw)
-            db.session.add(new_user)
-            db.session.commit()
-            flash("Account created", category = "success")
+            new_user.add()
+            
     return render_template("register.html")
 
 @auth.route("/student-login", methods = ['GET', 'POST'])
