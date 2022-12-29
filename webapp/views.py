@@ -3,6 +3,7 @@ from .models import Book, User, Category
 from . import db
 from flask_login import login_required, login_user, logout_user, current_user
 import json
+import datetime
 
 views = Blueprint("views", __name__)
 
@@ -16,10 +17,24 @@ def home():
 def student_home():
     return render_template("student_home.html", user = current_user)
 
-@views.route("/add-book")
+@views.route("/add-book", methods = ["POST", "GET"])
 @login_required
 def add_book():
-    return render_template("add_book.html", user = current_user)
+
+    allcat = Category.query.all()
+
+    if request.method == "POST":
+        b_name = request.form.get("b_name")
+        b_auth = request.form.get("b_author")
+        b_publisher = request.form.get("b_publisher")
+        b_publication = request.form.get("b_publication")
+        b_p_year = datetime.datetime.strptime(b_publication, '%Y-%m-%d')
+
+        b_cat = request.form.get("b_cat")
+        book = Book(title = b_name, author = b_auth, publisher = b_publisher, publication_year = b_p_year, category = b_cat)
+        book.add()
+        
+    return render_template("add_book.html", user = current_user, allcat = allcat)
 
 @views.route("/add-category", methods = ["GET", "POST"])
 @login_required

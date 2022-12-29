@@ -18,7 +18,7 @@
               {% for cat in allcat%}
               <li class = "list-group-item">
                 {{ cat.Category }}
-                <button type="button" class="btn btn-outline-dark align-content-end" onclick = "deleteCat({{cat.id}})"><span aria-hidden = "true">&times;</span></button>
+                <button type="button" class="btn btn-outline-danger align-content-end" onclick = "deleteCat({{cat.id}})"><span aria-hidden = "true">&times;</span></button>
               </li>
               {% endfor %}
             </ul>
@@ -27,7 +27,7 @@
             <label for="category" class="form-label">Category:</label>
             <input type="text" Required class="form-control" maxlength = "200" id="category" name="category" aria-describedby="emailHelp" placeholder = "Category">
           </div></p>
-          <button type="submit" class="btn btn-outline-primary">Add Category</button>
+          <button type="submit" class="btn btn-outline-dark" onclick = "refreshpage()">Add Category</button>
               </form>
     </div>
   </div>

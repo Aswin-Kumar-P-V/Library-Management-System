@@ -6,3 +6,7 @@ function deleteCat(catID){
         window.location.href = "/add-category"
     });
 }
+
+function refreshpage(){
+    window.parent.location = window.parent.location.href;
+} 

@@ -26,15 +26,18 @@
                             <input type="text" Required class="form-control" maxlength = "200" id="b_publisher" name="b_publisher" aria-describedby="emailHelp" placeholder = "Publisher">
                           </div>
                           <div class="mb-3">
-                            <label for="b_publication" class="form-label">Publication</label>
-                            <input type="text" Required class="form-control" maxlength = "200" id="b_publication" name="b_publication" aria-describedby="emailHelp" placeholder = "Publication">
+                            <label for="b_publication" class="form-label">Publication Date</label>
+                            <input type="Date" Required class="form-control" id="b_publication" name="b_publication" aria-describedby="emailHelp" placeholder = "Publication">
                           </div>
                           <div class="mb-3">
                             <label for="b_cat" class="form-label">Category</label>
-                            
-                          </div>
-                          
-                        <button type="submit" class="btn btn-outline-primary">Add Book</button>
+                            <select Required class="form-control" name="cat" id="cat">
+                            {% for cat in allcat%}
+                            <option value="{{cat.Category}}">{{cat.Category}}</option>
+                            {%endfor%}
+                            </select>
+                          </div>  
+                        <button type="submit" class="btn btn-outline-dark">Add Book</button>
               </form>
                   </p>
                   
