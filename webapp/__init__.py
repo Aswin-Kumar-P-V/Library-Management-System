@@ -16,11 +16,10 @@ def create_app():
     from .auth import auth
     from .models import User, Book 
 
-    if not path.exists("instance\\LMS.db"):
-        with app.app_context():
-            from .models import User, Book
-            db.create_all()
-            print("Database created")
+    with app.app_context():
+        from .models import User, Book
+        db.create_all()
+        print("Database created")
     
     login_manager = LoginManager()
     login_manager.login_view = "auth.login"

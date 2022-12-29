@@ -1,3 +1,8 @@
 {% extends 'base.html' %} 
 {% block title%}Home{% endblock%}
 {%block nav4%}<a class="nav-item nav-link" id="logout" href="/logout">Logout</a>{%endblock%}
+{%block content%}
+{% if user.is_authenticated%}
+<h3>Hello {{user.username}}</h3> 
+{% endif %}
+{%endblock%}
