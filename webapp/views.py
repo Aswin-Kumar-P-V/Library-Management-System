@@ -63,3 +63,10 @@ def del_cat():
         db.session.commit()
     
     return jsonify({})
+
+@views.route("/view-users", methods = ["GET", "POST"])
+@login_required
+def view_user():
+    users = User.query.all()
+
+    return render_template("view_users.html", users = users)

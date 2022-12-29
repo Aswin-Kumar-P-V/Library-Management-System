@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title%}View-Users{%endblock%}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
+{% block content %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Username</th>
+        <th scope="col">Edit details</th>
+        <th scope = "col"> Delete User </th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+      <tr>
+        <th scope="row">{{user.id}}</th>
+        <td>{{user.username}}</td>
+        <td>
+            <form method = "POST"><button type = "submit" class="btn btn-outline-dark">Update</button></form>
+        </td>
+        <td>
+            <button type="button" class="btn btn-outline-danger align-content-end" onclick = "deleteUser({{user.id}})"><span aria-hidden = "true">&times;</span></button>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
