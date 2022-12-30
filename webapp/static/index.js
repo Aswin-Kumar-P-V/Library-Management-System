@@ -19,3 +19,12 @@ function deleteUser(userID){
         window.location.href = "/view-users"
     });
 }
+
+function deleteBook(bookID){
+    fetch("/delete-book" , {
+        method : "POST",
+        body :JSON.stringify({bookID : bookID}),
+    }).then((_res) => {
+        window.location.href = "/view-books"
+    });
+}
