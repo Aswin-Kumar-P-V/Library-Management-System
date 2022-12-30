@@ -70,3 +70,14 @@ def view_user():
     users = User.query.all()
 
     return render_template("view_users.html", users = users)
+
+@views.route("/delete-user", methods = ["POST"])
+@login_required
+def del_user():
+    user = json.loads(request.data)
+    userID = user['userID']
+    user = User.query.get(userID)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+    return jsonify({})

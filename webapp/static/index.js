@@ -10,3 +10,12 @@ function deleteCat(catID){
 function refreshpage(){
     window.parent.location = window.parent.location.href;
 } 
+
+function deleteUser(userID){
+    fetch("/delete-user", {
+        method : "POST",
+        body : JSON.stringify({userID : userID}),
+    }).then((_res) =>{
+        window.location.href = "/view-users"
+    });
+}
