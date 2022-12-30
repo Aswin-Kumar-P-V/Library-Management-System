@@ -125,3 +125,10 @@ def delete_book():
         db.session.delete(book)
         db.session.commit()
     return jsonify({})
+
+@views.route("/search-book", methods = ["POST", "GET"])
+@login_required
+def search_book():
+    if request.method == "POST":
+        flash("searched", category="success")
+    return render_template("search_book.html", user = current_user)
