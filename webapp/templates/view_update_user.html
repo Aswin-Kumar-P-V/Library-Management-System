@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}update-user{% endblock %}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
+{% block content %}
+{% if update_user %}
+<div class='container my-5'>
+    <div class='row'>
+      <div class = "col-4">
+      </div>
+<div class="card" style="width: 18rem;">
+    <img src="static/update_user.gif" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Update Details</h5>
+      <p class="card-text">
+        <form method = "POST" action = "/update-user">
+            <div class="mb-3">
+                <label for="ID" class="form-label">USER ID</label>
+                <input type="text" class="form-control" id="UID" name = "UID" value = "{{update_user.id}}" readonly>
+              </div>
+            <div class="mb-3">
+              <label for="Username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="Uname" name = "Uname" value = "{{update_user.username}}">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="text" class="form-control" id="Pass" name = "Pass" value = "{{update_user.password}}">
+            </div>
+            <button type="submit" class="btn btn-outline-dark" id = "userID" value = "{{update_user.id}}">Update</button>
+          </form>
+      </p>
+      
+    </div>
+  </div>
+{% endif %}
+{% endblock  %}
