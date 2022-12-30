@@ -29,9 +29,9 @@ def add_book():
         b_publisher = request.form.get("b_publisher")
         b_publication = request.form.get("b_publication")
         b_p_year = datetime.datetime.strptime(b_publication, '%Y-%m-%d')
+        b_cat = request.form.get("cat")
 
-        b_cat = request.form.get("b_cat")
-        book = Book(title = b_name, author = b_auth, publisher = b_publisher, publication_year = b_p_year, category = b_cat)
+        book = Book(title = b_name, author = b_auth, publisher = b_publisher, publication_year = b_p_year, category = b_cat, status = "Available")
         book.add()
         
     return render_template("add_book.html", user = current_user, allcat = allcat)
@@ -92,7 +92,8 @@ def update_user():
 @views.route("/view-books", methods = ["POST", "GET"])
 @login_required
 def view_books():
-    return render_template("view_book.html", user = current_user)
+    books = Book.query.all()
+    return render_template("view_book.html", user = current_user, books = books)
 
 @views.route("/update-user", methods  = ["POST", "GET"])
 @login_required
@@ -113,3 +114,14 @@ def update_user_details():
             db.session.commit()
         flash("User details updated", category="success")
     return render_template("view_users.html", users = users)
+
+@views.route("/delete-book", methods = ["POST"])
+@login_required
+def delete_book():
+    book = json.loads(request.data)
+    bookID = book['bookID']
+    book = Book.query.get(bookID)
+    if book:
+        db.session.delete(book)
+        db.session.commit()
+    return jsonify({})
