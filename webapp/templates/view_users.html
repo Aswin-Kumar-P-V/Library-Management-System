@@ -17,7 +17,7 @@
         <th scope="row">{{user.id}}</th>
         <td>{{user.username}}</td>
         <td>
-            <form method = "POST" action = "/update-user"><button type = "submit" class="btn btn-outline-dark" id = "userID" name = "userID" value = {{user.id}}>Update</button></form>
+            <form method = "POST" action = "/view-update-user"><button type = "submit" class="btn btn-outline-dark" id = "userID" name = "userID" value = {{user.id}}>Update</button></form>
         </td>
         <td>
             <button type="button" class="btn btn-outline-danger align-content-end" onclick = "deleteUser({{user.id}})"><span aria-hidden = "true">&times;</span></button>

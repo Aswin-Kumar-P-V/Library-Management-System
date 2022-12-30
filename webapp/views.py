@@ -82,16 +82,34 @@ def del_user():
         db.session.commit()
     return jsonify({})
 
-@views.route("/update-user", methods = ["POST", "GET"])
+@views.route("/view-update-user", methods = ["POST", "GET"])
 @login_required
 def update_user():
-    if request.method == "POST":
-        userID = request.form.get("userID")
-        user =  User.query.get(userID)
-        return render_template("update_user.html", user = current_user, update_user = user)
-    return jsonify({})
+    userID = request.form.get("userID")
+    user =  User.query.get(userID)
+    return render_template("view_update_user.html", user = current_user, update_user = user)
 
 @views.route("/view-books", methods = ["POST", "GET"])
 @login_required
 def view_books():
     return render_template("view_book.html", user = current_user)
+
+@views.route("/update-user", methods  = ["POST", "GET"])
+@login_required
+def update_user_details():
+    users = User.query.all()
+    if request.method == "POST":
+        uName = request.form.get("Uname")
+        uPass = request.form.get("Pass")
+        uID = request.form.get("UID")
+        user = User.query.get(int(uID))
+        check_user = User.query.filter_by(username = uName).first()
+        if check_user:
+            flash("Username exists try again", category= "error")
+            return redirect(url_for("views.update_user_details"))
+        else:
+            user.username =  uName
+            user.password = uPass
+            db.session.commit()
+        flash("User details updated", category="success")
+    return render_template("view_users.html", users = users)
