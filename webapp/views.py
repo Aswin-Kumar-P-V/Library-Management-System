@@ -20,7 +20,7 @@ def student_home():
 @views.route("/add-book", methods = ["POST", "GET"])
 @login_required
 def add_book():
-
+    
     allcat = Category.query.all()
 
     if request.method == "POST":
@@ -81,3 +81,17 @@ def del_user():
         db.session.delete(user)
         db.session.commit()
     return jsonify({})
+
+@views.route("/update-user", methods = ["POST", "GET"])
+@login_required
+def update_user():
+    if request.method == "POST":
+        userID = request.form.get("userID")
+        user =  User.query.get(userID)
+        return render_template("update_user.html", user = current_user, update_user = user)
+    return jsonify({})
+
+@views.route("/view-books", methods = ["POST", "GET"])
+@login_required
+def view_books():
+    return render_template("view_book.html", user = current_user)

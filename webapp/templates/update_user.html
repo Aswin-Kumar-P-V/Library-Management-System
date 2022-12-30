@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}update-user{% endblock %}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
+{% block content %}
+{% if update_user %}
+
+hello {{update_user.username}}
+
+{% endif %}
+{% endblock  %}
