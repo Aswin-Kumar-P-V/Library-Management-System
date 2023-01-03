@@ -13,6 +13,7 @@ class Book(db.Model):
     borrowed_date = db.Column(db.DateTime)
     return_by = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    count = db.Column(db.Integer)
 
     def add(self):
         old_book = Book.query.filter_by(title = self.title).first()

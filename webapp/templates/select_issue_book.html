@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Issue book(select book){% endblock  %}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
+{% block content %}
+
+<div class='container my-5'>
+    <div class='row'>
+      <div class = "col-4">
+      </div>
+      <div class = "col-4">
+      <form method = "POST" action = "/select-issue-book">
+        <input type = "text" id = "search" name = "search" placeholder="Book Title"><button type = "submit" class="btn btn-outline-light">🔍</button>
+      </form>
+  </div>
+  </div>
+  </div>
+
+  {% if book %}
+  <table class="table my-5">
+    <thead>
+      <tr class="table-dark">
+        <th scope="col">ID</th>
+        <th scope="col">Title</th>
+        <th scope="col">Author</th>
+        <th scope="col">Publisher</th>
+        <th scope="col">Publcation Year</th>
+        <th scope="col">Category</th>
+        <th scope="col">Select Book</th>
+      </tr>
+      <tr >
+        <th scope="row">{{book.id}}</th>
+        <td>{{book.title}}</td>
+        <td>{{book.author}}</td>
+        <td>{{book.publisher}}</td>
+        <td>{{book.publication_year.date()}}</td>
+        <td>{{book.category}}</td>
+        <td>
+            <form method = "POST" action = "/select-issue-book"><button type = "submit" class="btn btn-outline-dark" id = "bookID" name = "bookID" value = {{book.id}}>Select</button></form>
+        </td>
+    </thead>
+    <tbody>
+  {% endif %}
+
+  {% if books1 %}
+<table class="table my-5">
+    <thead>
+      <tr class="table-dark">
+        <th scope="col">ID</th>
+        <th scope="col">Title</th>
+        <th scope="col">Author</th>
+        <th scope="col">Publisher</th>
+        <th scope="col">Publcation Year</th>
+        <th scope="col">Category</th>
+        <th scope="col">Select Book</th>
+      </tr>
+    </thead>
+    <tbody>
+    
+    {% for book in books1 %}
+    {% if book.status == "Available" %}
+      <tr>
+        <th scope="row">{{book.id}}</th>
+        <td>{{book.title}}</td>
+        <td>{{book.author}}</td>
+        <td>{{book.publisher}}</td>
+        <td>{{book.publication_year.date()}}</td>
+        <td>{{book.category}}</td>
+        <td><form method = "POST" action = "/select-issue-book"><button type = "submit" class="btn btn-outline-dark" id = "bookID" name = "bookID" value = {{book.id}}>Select</button></form></td>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+{% endblock %}

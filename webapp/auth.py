@@ -7,7 +7,9 @@ auth = Blueprint("auth", __name__)
 
 @auth.route("/login", methods = ["GET", "POST"])
 def login():
-    
+    # lib = Librarian(username = "librarian123", password = "librarian@123")   
+    # db.session.add(lib)
+    # db.session.commit()
     if request.method == "POST":
         u_name = request.form.get("uname")
         passwd = request.form.get("pass")

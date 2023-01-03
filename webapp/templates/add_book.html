@@ -30,6 +30,10 @@
                             <input type="Date" Required class="form-control" id="b_publication" name="b_publication" aria-describedby="emailHelp" placeholder = "Publication">
                           </div>
                           <div class="mb-3">
+                            <label for="b_publication" class="form-label">Number Of Books</label>
+                            <input type="number" Required class="form-control" id="b_no" name="b_no" aria-describedby="emailHelp" placeholder = "Number Of Books" min = "0">
+                          </div>
+                          <div class="mb-3">
                             <label for="b_cat" class="form-label">Category</label>
                             <select Required class="form-control" name="cat" id="cat">
                             {% for cat in allcat%}

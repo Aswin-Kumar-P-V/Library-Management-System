@@ -3,29 +3,6 @@
 {%block nav4%}<a class="nav-item nav-link" id="logout" href="/logout">Logout</a>{%endblock%}
 {%block content%}
 {% if user.is_authenticated%}
-{% if book %}
-<table class="table my-5">
-  <thead>
-    <tr class="table-dark">
-      <th scope="col">ID</th>
-      <th scope="col">Title</th>
-      <th scope="col">Author</th>
-      <th scope="col">Publisher</th>
-      <th scope="col">Publcation Year</th>
-      <th scope="col">Category</th>
-      <th scope="col">Status</th>
-    </tr>
-    <tr >
-      <th scope="row">{{book.id}}</th>
-      <td>{{book.title}}</td>
-      <td>{{book.author}}</td>
-      <td>{{book.publisher}}</td>
-      <td>{{book.publication_year.date()}}</td>
-      <td>{{book.category}}</td>
-      <td>{{book.status}}</td>
-  </thead>
-  <tbody>
-{% endif %}
 <div class='container my-5'>
   <div class='row'>
     <div class = "col-4">
@@ -37,5 +14,60 @@
 </div>
 </div>
 </div>
+{% if books1 %}
+<table class="table my-5">
+    <thead>
+      <tr class="table-dark">
+        <th scope="col">ID</th>
+        <th scope="col">Title</th>
+        <th scope="col">Author</th>
+        <th scope="col">Publisher</th>
+        <th scope="col">Publcation Year</th>
+        <th scope="col">Category</th>
+      </tr>
+    </thead>
+    <tbody>
+    
+    {% for book in books1  %}
+    {% if book.status == "Available" %}
+      <tr>
+        <th scope="row">{{book.id}}</th>
+        <td>{{book.title}}</td>
+        <td>{{book.author}}</td>
+        <td>{{book.publisher}}</td>
+        <td>{{book.publication_year.date()}}</td>
+        <td>{{book.category}}</td>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+{% if books %}
+<table class="table my-5">
+  <thead>
+    <tr class="table-dark">
+      <th scope="col">ID</th>
+      <th scope="col">Title</th>
+      <th scope="col">Author</th>
+      <th scope="col">Publisher</th>
+      <th scope="col">Publcation Year</th>
+      <th scope="col">Category</th>
+      <th scope="col">Status</th>
+    </tr>
+    {% for book in books %}
+    <tr >
+      <th scope="row">{{book.id}}</th>
+      <td>{{book.title}}</td>
+      <td>{{book.author}}</td>
+      <td>{{book.publisher}}</td>
+      <td>{{book.publication_year.date()}}</td>
+      <td>{{book.category}}</td>
+      <td>{{book.status}}</td>
+    </tr>
+    {% endfor %}
+  </thead>
+  <tbody>
+{% endif %}
+
 {% endif %}
 {%endblock%}

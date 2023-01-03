@@ -2,7 +2,7 @@
 {% block title %}Search-book{% endblock  %}
 {%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
 {% block content%}
-{% if book %}
+{% if books %}
 <table class="table my-5">
   <thead>
     <tr class="table-dark">
@@ -14,6 +14,7 @@
       <th scope="col">Category</th>
       <th scope="col">Status</th>
     </tr>
+    {% for book in books %}
     <tr >
       <th scope="row">{{book.id}}</th>
       <td>{{book.title}}</td>
@@ -24,6 +25,7 @@
       <td>{{book.status}}</td>
   </thead>
   <tbody>
+    {% endfor %}
 {% endif %}
 <div class='container my-5'>
   <div class='row'>
@@ -31,7 +33,7 @@
     </div>
     <div class = "col-4">
     <form method = "POST" action = "/search-book">
-      <input type = "text" id = "search" name = "search" ><button type = "submit" class="btn btn-outline-light">🔍</button>
+      <input type = "text" id = "search" name = "search" placeholder="Book Title"><button type = "submit" class="btn btn-outline-light" >🔍</button>
     </form>
 </div>
 </div>

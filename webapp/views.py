@@ -4,18 +4,21 @@ from . import db
 from flask_login import login_required, login_user, logout_user, current_user
 import json
 import datetime
+import re
 
 views = Blueprint("views", __name__)
 
 @views.route("/")
 @login_required
 def home():
+    
     return render_template("home.html", user = current_user)
 
 @views.route("/home")
 @login_required
 def student_home():
-    return render_template("student_home.html", user = current_user)
+    books1 = Book.query.all()
+    return render_template("student_home.html", user = current_user, books1 = books1)
 
 @views.route("/add-book", methods = ["POST", "GET"])
 @login_required
@@ -30,8 +33,9 @@ def add_book():
         b_publication = request.form.get("b_publication")
         b_p_year = datetime.datetime.strptime(b_publication, '%Y-%m-%d')
         b_cat = request.form.get("cat")
+        b_count = request.form.get("b_no")
 
-        book = Book(title = b_name, author = b_auth, publisher = b_publisher, publication_year = b_p_year, category = b_cat, status = "Available")
+        book = Book(title = b_name, author = b_auth, publisher = b_publisher, publication_year = b_p_year, category = b_cat, status = "Available", count = b_count)
         book.add()
         
     return render_template("add_book.html", user = current_user, allcat = allcat)
@@ -68,7 +72,7 @@ def del_cat():
 @login_required
 def view_user():
     users = User.query.all()
-
+    users.pop(0)
     return render_template("view_users.html", users = users)
 
 @views.route("/delete-user", methods = ["POST"])
@@ -132,9 +136,22 @@ def delete_book():
 def search_book():
     if request.method == "POST":
         title = request.form.get("search")
-        book = Book.query.filter_by(title = title).first()
-        if book:
-            return render_template("search_book.html", user = current_user, book = book)
+        title = title.strip()
+
+        if title == "":
+            flash("Give some valid input", category="error")
+            return render_template("search_book.html", user = current_user)
+    
+        AllBooks = Book.query.all()
+        books = []
+        
+        for book in AllBooks:
+            search = book.title.find(title)
+            if search != -1:
+                books.append(book)
+        
+        if books:
+            return render_template("search_book.html", user = current_user, books = books)
         else:
             flash("Book not found!!", category="error")
     return render_template("search_book.html", user = current_user)
@@ -145,9 +162,48 @@ def search_book():
 def search_book_user():
     if request.method == "POST":
         title = request.form.get("search")
-        book = Book.query.filter_by(title = title).first()
-        if book:
-            return render_template("student_home.html", user = current_user, book = book)
-        else:
-            flash("Book not found!!", category="error")
+        title = title.strip()
+
+        if title == "":
+            flash("Give some valid input", category= "error")
+            return render_template("student_home.html", user = current_user)
+
+        AllBooks = Book.query.all()
+        books = []
+
+        for book in AllBooks:
+            search = book.title.find(title)
+            if search != -1:
+                books.append(book)
+            if books:
+                return render_template("student_home.html", user = current_user, books = books)
+            else:
+                flash("Book not found!!", category="error")
+
     return render_template("student_home.html", user = current_user)
+
+@views.route("/select-issue-book", methods = ["POST", "GET"])
+@login_required
+
+def select_issue_book():
+    if request.method == "POST":
+        title = request.form.get("search")
+        title = title.strip()
+
+        if title == "":
+            flash("Give some valid input", category= "error")
+            return render_template("student_home.html", user = current_user)
+
+        AllBooks = Book.query.all()
+        books = []
+
+        for book in AllBooks:
+            search = book.title.find(title)
+            if search != -1:
+                books.append(book)
+            if books:
+                return render_template("student_home.html", user = current_user, books = books)
+            else:
+                flash("Book not found!!", category="error")
+    books = Book.query.all()
+    return render_template("select_issue_book.html", user = current_user, books1 = books)
