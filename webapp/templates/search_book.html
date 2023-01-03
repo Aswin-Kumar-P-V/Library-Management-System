@@ -1,8 +1,7 @@
-{% extends 'base.html' %} 
-{% block title%}Home{% endblock%}
-{%block nav4%}<a class="nav-item nav-link" id="logout" href="/logout">Logout</a>{%endblock%}
-{%block content%}
-{% if user.is_authenticated%}
+{% extends 'base.html' %}
+{% block title %}Search-book{% endblock  %}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
+{% block content%}
 {% if book %}
 <table class="table my-5">
   <thead>
@@ -31,11 +30,10 @@
     <div class = "col-4">
     </div>
     <div class = "col-4">
-    <form method = "POST" action = "/search-book-user">
+    <form method = "POST" action = "/search-book">
       <input type = "text" id = "search" name = "search" ><button type = "submit" class="btn btn-outline-light">🔍</button>
     </form>
 </div>
 </div>
 </div>
-{% endif %}
-{%endblock%}
+{% endblock  %}

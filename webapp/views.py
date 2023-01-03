@@ -105,7 +105,7 @@ def update_user_details():
         uID = request.form.get("UID")
         user = User.query.get(int(uID))
         check_user = User.query.filter_by(username = uName).first()
-        if check_user:
+        if check_user and check_user.id != user.id:
             flash("Username exists try again", category= "error")
             return redirect(url_for("views.update_user_details"))
         else:
@@ -125,3 +125,29 @@ def delete_book():
         db.session.delete(book)
         db.session.commit()
     return jsonify({})
+
+@views.route("/search-book", methods = ["POST", "GET"])
+@login_required
+
+def search_book():
+    if request.method == "POST":
+        title = request.form.get("search")
+        book = Book.query.filter_by(title = title).first()
+        if book:
+            return render_template("search_book.html", user = current_user, book = book)
+        else:
+            flash("Book not found!!", category="error")
+    return render_template("search_book.html", user = current_user)
+
+@views.route("/search-book-user", methods = ["POST", "GET"])
+@login_required
+
+def search_book_user():
+    if request.method == "POST":
+        title = request.form.get("search")
+        book = Book.query.filter_by(title = title).first()
+        if book:
+            return render_template("student_home.html", user = current_user, book = book)
+        else:
+            flash("Book not found!!", category="error")
+    return render_template("student_home.html", user = current_user)
