@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title%}Select User{% endblock%}
+{% block nav1 %}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{% endblock %}
+{% block content %}
+{% if book %}
+
+    <h3>Book Details</h3>
+
+    <h4><label class = "form-label">{{book.id}}:{{book.title}}</label></h4>
+
+{% endif %}
+<table class="table my-4">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Username</th>
+        <th scope = "col"> Select User </th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+      <tr>
+        <th scope="row">{{user.id}}</th>
+        <td>{{user.username}}</td>
+        <td>
+            
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock  %}

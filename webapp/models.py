@@ -1,5 +1,5 @@
 from . import db
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 
 class Book(db.Model):
@@ -24,12 +24,31 @@ class Book(db.Model):
             db.session.commit()
             flash("Book Added", category = "success")
 
+    def search(self, title):
+        AllBooks = Book.query.all()
+        books = []
+
+        for book in AllBooks:
+            search = book.title.find(title)
+            if search != -1:
+                books.append(book)
+                
+        if books:
+            return books
+        else:
+            flash("Book not found!!", category="error")
 
 class User( db.Model, UserMixin):
     id = db.Column(db.Integer,  primary_key = True)
     username = db.Column(db.String(150), unique = True)
     password = db.Column(db.String(150))
     books = db.relationship("Book")
+    book1 = db.Column(db.Integer)
+    book1Borrow = db.Column(db.DateTime)
+    book2 = db.Column(db.Integer)
+    book2Borrow = db.Column(db.DateTime)
+    book3 = db.Column(db.Integer)
+    book3Borrow = db.Column(db.DateTime)
     
     def add(self):
         db.session.add(self)
@@ -43,7 +62,7 @@ class Category( db.Model):
     def add(self):
         db.session.add(self)
         db.session.commit()
-        flash("Category successfully added..refresh to view changes", category = "success")
+        flash("Category successfully added", category = "success")
 
 class Librarian( db.Model, UserMixin):
     id = db.Column(db.Integer,  primary_key = True)

@@ -15,7 +15,7 @@
   </div>
   </div>
 
-  {% if book %}
+  {% if books %}
   <table class="table my-5">
     <thead>
       <tr class="table-dark">
@@ -27,7 +27,8 @@
         <th scope="col">Category</th>
         <th scope="col">Select Book</th>
       </tr>
-      <tr >
+      {% for book in books %}
+      <tr>
         <th scope="row">{{book.id}}</th>
         <td>{{book.title}}</td>
         <td>{{book.author}}</td>
@@ -35,10 +36,11 @@
         <td>{{book.publication_year.date()}}</td>
         <td>{{book.category}}</td>
         <td>
-            <form method = "POST" action = "/select-issue-book"><button type = "submit" class="btn btn-outline-dark" id = "bookID" name = "bookID" value = {{book.id}}>Select</button></form>
+            <form method = "POST" action = "/select-issue-user"><button type = "submit" class="btn btn-outline-dark" id = "bookID" name = "bookID" value = {{book.id}}>Select</button></form>
         </td>
     </thead>
     <tbody>
+        {% endfor %}
   {% endif %}
 
   {% if books1 %}
@@ -65,7 +67,7 @@
         <td>{{book.publisher}}</td>
         <td>{{book.publication_year.date()}}</td>
         <td>{{book.category}}</td>
-        <td><form method = "POST" action = "/select-issue-book"><button type = "submit" class="btn btn-outline-dark" id = "bookID" name = "bookID" value = {{book.id}}>Select</button></form></td>
+        <td><form method = "POST" action = "/select-issue-user"><button type = "submit" class="btn btn-outline-dark" id = "bookID" name = "bookID" value = {{book.id}}>Select</button></form></td>
       {% endif %}
       {% endfor %}
     </tbody>

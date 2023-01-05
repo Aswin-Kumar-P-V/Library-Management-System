@@ -23,8 +23,6 @@ def student_home():
 @views.route("/add-book", methods = ["POST", "GET"])
 @login_required
 def add_book():
-    
-    allcat = Category.query.all()
 
     if request.method == "POST":
         b_name = request.form.get("b_name")
@@ -38,13 +36,13 @@ def add_book():
         book = Book(title = b_name, author = b_auth, publisher = b_publisher, publication_year = b_p_year, category = b_cat, status = "Available", count = b_count)
         book.add()
         
+    allcat = Category.query.all()
+
     return render_template("add_book.html", user = current_user, allcat = allcat)
 
 @views.route("/add-category", methods = ["GET", "POST"])
 @login_required
 def add_category():
-
-    allcat =  Category.query.all()
 
     if request.method == "POST":
             new_cat = request.form.get("category")
@@ -54,6 +52,8 @@ def add_category():
             else:
                 add_cat = Category(Category = new_cat)
                 add_cat.add()
+        
+    allcat =  Category.query.all()
     return render_template("add_category.html", user = current_user, allcat = allcat)
 
 @views.route("/delete-category", methods = ["POST"])
@@ -117,6 +117,7 @@ def update_user_details():
             user.password = uPass
             db.session.commit()
         flash("User details updated", category="success")
+    users.pop(0)
     return render_template("view_users.html", users = users)
 
 @views.route("/delete-book", methods = ["POST"])
@@ -141,19 +142,12 @@ def search_book():
         if title == "":
             flash("Give some valid input", category="error")
             return render_template("search_book.html", user = current_user)
-    
-        AllBooks = Book.query.all()
-        books = []
-        
-        for book in AllBooks:
-            search = book.title.find(title)
-            if search != -1:
-                books.append(book)
-        
+            
+        obBook = Book()
+        books = obBook.search(title = title)
+       
         if books:
             return render_template("search_book.html", user = current_user, books = books)
-        else:
-            flash("Book not found!!", category="error")
     return render_template("search_book.html", user = current_user)
 
 @views.route("/search-book-user", methods = ["POST", "GET"])
@@ -167,20 +161,13 @@ def search_book_user():
         if title == "":
             flash("Give some valid input", category= "error")
             return render_template("student_home.html", user = current_user)
+        obBook = Book()
+        books = obBook.search(title = title)
+        if books:
+            return render_template("student_home.html", user = current_user, books = books)
+    books1 = Book.query.all()
+    return render_template("student_home.html", user = current_user, books1 = books1)            
 
-        AllBooks = Book.query.all()
-        books = []
-
-        for book in AllBooks:
-            search = book.title.find(title)
-            if search != -1:
-                books.append(book)
-            if books:
-                return render_template("student_home.html", user = current_user, books = books)
-            else:
-                flash("Book not found!!", category="error")
-
-    return render_template("student_home.html", user = current_user)
 
 @views.route("/select-issue-book", methods = ["POST", "GET"])
 @login_required
@@ -192,18 +179,23 @@ def select_issue_book():
 
         if title == "":
             flash("Give some valid input", category= "error")
-            return render_template("student_home.html", user = current_user)
-
-        AllBooks = Book.query.all()
-        books = []
-
-        for book in AllBooks:
-            search = book.title.find(title)
-            if search != -1:
-                books.append(book)
-            if books:
-                return render_template("student_home.html", user = current_user, books = books)
-            else:
-                flash("Book not found!!", category="error")
+            return render_template("select_issue_book.html", user = current_user)
+        obBook = Book()
+        books = obBook.search(title = title)
+        if books:
+            return render_template("select_issue_book.html", user = current_user, books = books)
     books = Book.query.all()
     return render_template("select_issue_book.html", user = current_user, books1 = books)
+
+@views.route("/select-issue-user", methods = ["POST", "GET"])
+@login_required
+
+def select_issue_user():
+    if request.method == "POST":
+        bookId = request.form.get("bookID")
+        users = User.query.all()
+        users.pop(0)
+        book = Book.query.get(bookId)
+        
+        return render_template("select_issue_user.html", bookId = bookId, users = users, book = book)
+    return render_template("select_issue_user.html")
