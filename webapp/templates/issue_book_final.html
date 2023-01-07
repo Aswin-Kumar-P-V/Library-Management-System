@@ -2,7 +2,21 @@
 {% block title %}Search-book{% endblock  %}
 {%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
 {% block content%}
-{% if user and book %}
-
+{% if user and book and date and date1%}
+<div class = "container my-5">
+    <div class = "row">
+        <div class = "col-4">
+        </div>
+        <div class = "col-4">
+<div class="card" style="width: 18rem;">
+    <img src="static/issue_final.gif" class="card-img-top" alt="...">
+    <div class="card-body">
+        <b><i><label for="BookName" class="form-label">Book : {{book.title}}</label><br>
+            <label for="Username" class="form-label">User : {{user.username}}</label><br>
+            <label for = "IssueDate" class="form-label">Issue Date : {{date}}</label></br>
+            <label for = "IssueDate" class="form-label">Return By Date : {{date1}}</label></br>
+            
+    </div>
+  </div>
 {% endif %}
 {% endblock %}

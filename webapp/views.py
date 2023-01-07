@@ -3,7 +3,7 @@ from .models import Book, User, Category
 from . import db
 from flask_login import login_required, login_user, logout_user, current_user
 import json
-import datetime
+import datetime 
 import re
 
 views = Blueprint("views", __name__)
@@ -211,6 +211,13 @@ def issue_book():
             
             user = User.query.get(userId)
             book = Book.query.get(bookId)
-
-            return render_template("issue_book_final.html", user = user, book = book)
+            if user.No_Books <= 3:
+                date =datetime.date.today()
+                date1 = date +datetime.timedelta(days=7)
+                return render_template("issue_book_final.html", user = user, book = book, date = date, date1 = date1)
+            else:
+                users = User.query.all()
+                users.pop(0)
+                flash("Maximum no of books alloted for this user", category="error")
+                return render_template("select_issue_user.html", bookId = bookId, users = users, book = book)
     return render_template("issue-book-final.html")
