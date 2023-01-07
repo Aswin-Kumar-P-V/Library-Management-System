@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, flash, url_for, jsonify
+from flask import Blueprint, render_template, request, redirect, flash, url_for, jsonify, session
 from .models import Book, User, Category
 from . import db
 from flask_login import login_required, login_user, logout_user, current_user
@@ -193,9 +193,24 @@ def select_issue_book():
 def select_issue_user():
     if request.method == "POST":
         bookId = request.form.get("bookID")
+        session["bookId"] = bookId
         users = User.query.all()
         users.pop(0)
         book = Book.query.get(bookId)
-        
         return render_template("select_issue_user.html", bookId = bookId, users = users, book = book)
     return render_template("select_issue_user.html")
+
+@views.route("/issue-book", methods  = ["POST", "GET"])
+@login_required
+
+def issue_book():
+    if request.method == "POST":
+        if "bookId" in session:
+            bookId = session["bookId"]
+            userId = request.form.get("userId")
+            
+            user = User.query.get(userId)
+            book = Book.query.get(bookId)
+
+            return render_template("issue_book_final.html", user = user, book = book)
+    return render_template("issue-book-final.html")

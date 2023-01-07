@@ -23,7 +23,7 @@
         <th scope="row">{{user.id}}</th>
         <td>{{user.username}}</td>
         <td>
-            
+          <form method = "POST" action = "/issue-book"><button type = "submit" class="btn btn-outline-dark" id = "userId" name = "userId" value = {{user.id}}>Select</button></form>
         </td>
       </tr>
     {% endfor %}

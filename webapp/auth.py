@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from .models import Book, User, Category, Librarian
 from . import db
 from flask_login import login_required, login_user, logout_user, current_user
@@ -40,7 +40,7 @@ def register():
         elif user:
             flash("User already exists", category= "error")
         else:
-            new_user = User(username = u_name, password = passw)
+            new_user = User(username = u_name, password = passw, No_Books = 0)
             new_user.add()
             
     return render_template("register.html")
