@@ -15,7 +15,7 @@
             <label for="Username" class="form-label">User : {{user.username}}</label><br>
             <label for = "IssueDate" class="form-label">Issue Date : {{date}}</label></br>
             <label for = "IssueDate" class="form-label">Return By Date : {{date1}}</label></br>
-            
+            <form method = "POST" action = "/confirm-issue-book"><button type = "submit" class="btn btn-outline-dark" id = "userId" name = "userId" value = {{user.id}}>Confirm</button></form>
     </div>
   </div>
 {% endif %}

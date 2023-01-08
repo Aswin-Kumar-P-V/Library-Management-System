@@ -192,7 +192,14 @@ def select_issue_book():
 
 def select_issue_user():
     if request.method == "POST":
+
         bookId = request.form.get("bookID")
+        book = Book.query.get(bookId)
+        if book.status != "Available":
+            flash("Book no available!!", category="error")
+            books = Book.query.all()
+            return render_template("select_issue_book.html", user = current_user, books1 = books)
+        
         session["bookId"] = bookId
         users = User.query.all()
         users.pop(0)
@@ -211,9 +218,13 @@ def issue_book():
             
             user = User.query.get(userId)
             book = Book.query.get(bookId)
-            if user.No_Books <= 3:
+            if user.No_Books < 3:
                 date =datetime.date.today()
                 date1 = date +datetime.timedelta(days=7)
+                
+                session["b_date"] = date
+                session["r_date"] = date1
+                
                 return render_template("issue_book_final.html", user = user, book = book, date = date, date1 = date1)
             else:
                 users = User.query.all()
@@ -221,3 +232,47 @@ def issue_book():
                 flash("Maximum no of books alloted for this user", category="error")
                 return render_template("select_issue_user.html", bookId = bookId, users = users, book = book)
     return render_template("issue-book-final.html")
+
+@views.route("/confirm-issue-book", methods = ["POST", "GET"])
+@login_required
+
+def confirm_issue_book():
+    if request.method == "POST":
+        if "bookId" in session:
+            bookId = session["bookId"]
+            userId = request.form.get("userId")
+
+            user = User.query.get(userId)
+            book = Book.query.get(bookId)
+
+            
+            if user.No_Books == 0 :
+                user.book1 = book.title
+                user.book1Borrow = datetime.datetime.today()
+                user.book1Return = datetime.datetime.today() +datetime.timedelta(days=7)
+                user.No_Books += 1  
+                
+            elif user.No_Books == 1:
+                user.book2 = book.title
+                user.book2Borrow = datetime.datetime.today()
+                user.book2Return = datetime.datetime.today() +datetime.timedelta(days=7)
+                user.No_Books += 1 
+                
+            elif user.No_Books == 2:
+                user.book3 = book.title
+                user.book3Borrow = datetime.datetime.today()
+                user.book3Return = datetime.datetime.today() +datetime.timedelta(days=7)
+                user.No_Books += 1 
+            
+            db.session.commit()
+
+            book.count -= 1
+            if book.count == 0:
+                book.status = "Not Available"
+            db.session.commit()
+            flash("Book allocated", category="success")
+            books = Book.query.all()
+            return render_template("select_issue_book.html", user = current_user, books1 = books)
+
+    books = Book.query.all()
+    return render_template("select_issue_book.html", user = current_user, books1 = books)
