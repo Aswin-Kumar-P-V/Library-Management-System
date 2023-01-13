@@ -1,0 +1,55 @@
+{% extends "base.html"%}
+{% block title%}Return Book{%endblock%}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
+{% block content %}
+{% if users %}
+<table class="table my-4">
+    <thead>
+      <tr class="table-dark">
+        <th scope="col">Id</th>
+        <th scope="col">Username</th>
+        <th scope="col">View</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+      <tr>
+        <th scope="row">{{user.id}}</th>
+        <td>{{user.username}}</td>
+        <td>
+            <form method = "POST" action = "return-book"><button type = "submit" class="btn btn-outline-dark" id = "userID" name = "userID" value = {{user.id}}>View</button></form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% if user %}
+  <div class = "container my-5">
+    <div class = "row">
+        <div class = "col-4">
+        </div>
+        <div class = "col-4">
+  <div class="card" style="width: 18rem;">
+    <img src="static/return.gif" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">User Details</h5>
+      <p class="card-text">
+        <form method = "POST" action = "return-book-submit" class = "form-control">
+        <b>Username:<label class= "form-control"><b>{{user.username}}</b></label><br>
+        {% if user.book1 %}
+        <label>Book 1:</label>{{user.book1}}<button type="submit" class="btn btn-outline-primary align-content-end" value = {{user.book1}} id = "bookId" name = "bookId"><span aria-hidden = "true">✔️</span></button><br>
+        {% endif %}
+        {% if user.book2 %}
+        <label>Book 2:</label>{{user.book2}}<button type="submit" class="btn btn-outline-primary align-content-end" value = {{user.book2}} id = "bookId" name = "bookId"><span aria-hidden = "true">✔️</span></button><br>
+        {% endif %}
+        {% if user.book3 %}
+        <label>Book 3:</label>{{user.book3}}<button type="submit" class="btn btn-outline-primary align-content-end" value = {{user.book3}} id = "bookId" name = "bookId"><span aria-hidden = "true">✔️</span></button><br>
+        {% endif %}
+    </form>
+      </p>
+      
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}

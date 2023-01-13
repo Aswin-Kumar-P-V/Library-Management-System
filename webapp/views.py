@@ -11,7 +11,6 @@ views = Blueprint("views", __name__)
 @views.route("/")
 @login_required
 def home():
-    
     return render_template("home.html", user = current_user)
 
 @views.route("/home")
@@ -276,3 +275,26 @@ def confirm_issue_book():
 
     books = Book.query.all()
     return render_template("select_issue_book.html", user = current_user, books1 = books)
+
+@views.route("/return-book", methods = ["POST", "GET"])
+@login_required
+
+def return_book():
+    if request.method == "POST":
+        userId = request.form.get("userID")
+        user = User.query.get(userId)
+        return render_template("return_book.html", user = user)
+    users = User.query.all()
+    users.pop(0)
+    return render_template("return_book.html", users = users)
+
+@views.route("/return-book-submit", methods = ["POST", "GET"])
+@login_required
+
+def return_book_submit():
+    if request.method == "POST":
+        bookID = request.form.get("bookId")
+        flash(bookID, category="success")
+        redirect(url_for("views.home"))
+    return jsonify({})
+    
