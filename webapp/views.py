@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for, jsonify, session
-from .models import Book, User, Category
+from .models import Book, User, Category, Book1, Book2, Book3
 from . import db
 from flask_login import login_required, login_user, logout_user, current_user
 import json
@@ -11,6 +11,10 @@ views = Blueprint("views", __name__)
 @views.route("/")
 @login_required
 def home():
+    # book =  Book1.query.get(2)
+    # date = datetime.datetime.today()
+    # book.book1Return = date + datetime.timedelta(days=-5)
+    # db.session.commit()
     return render_template("home.html", user = current_user)
 
 @views.route("/home")
@@ -82,6 +86,18 @@ def del_user():
     user = User.query.get(userID)
     if user:
         db.session.delete(user)
+        db.session.commit()
+    book1 = Book1.query.filter_by(id = userID).first()
+    if book1:
+        db.session.delete(book1)
+        db.session.commit()
+    book2 = Book2.query.filter_by(id = userID).first()
+    if book2:
+        db.session.delete(book2)
+        db.session.commit()
+    book3 = Book3.query.filter_by(id = userID).first()
+    if book3:
+        db.session.delete(book3)
         db.session.commit()
     return jsonify({})
 
@@ -195,10 +211,10 @@ def select_issue_user():
         bookId = request.form.get("bookID")
         book = Book.query.get(bookId)
         if book.status != "Available":
-            flash("Book no available!!", category="error")
+            flash("Book not available!!", category="error")
             books = Book.query.all()
             return render_template("select_issue_book.html", user = current_user, books1 = books)
-        
+
         session["bookId"] = bookId
         users = User.query.all()
         users.pop(0)
@@ -213,8 +229,19 @@ def issue_book():
     if request.method == "POST":
         if "bookId" in session:
             bookId = session["bookId"]
+            book = Book.query.get(bookId)
             userId = request.form.get("userId")
             
+            book1 = Book1.query.filter_by(book1 = book.title, id =userId).first()
+            book2 = Book2.query.filter_by(book2 = book.title, id =userId).first()
+            book3 = Book3.query.filter_by(book3 = book.title, id = userId).first()
+            
+            if book1 or book2 or book3:
+                users = User.query.all()
+                users.pop(0)
+                flash("This Book Already Alloted To This User", category="error")
+                return render_template("select_issue_user.html", bookId = bookId, users = users, book = book)
+
             user = User.query.get(userId)
             book = Book.query.get(bookId)
             if user.No_Books < 3:
@@ -243,28 +270,30 @@ def confirm_issue_book():
 
             user = User.query.get(userId)
             book = Book.query.get(bookId)
-
             
-            if user.No_Books == 0 :
-                user.book1 = book.title
-                user.book1Borrow = datetime.datetime.today()
-                user.book1Return = datetime.datetime.today() +datetime.timedelta(days=7)
+            if user.free == 1 or Book1.query.filter_by(id = userId).first() == None:
+                borrow = datetime.datetime.today()
+                returnd = datetime.datetime.today() +datetime.timedelta(days=7)
+                book = Book1(id = userId, book1 = book.title, book1Borrow = borrow , book1Return = returnd)
+                db.session.add(book)
                 user.No_Books += 1  
                 
-            elif user.No_Books == 1:
-                user.book2 = book.title
-                user.book2Borrow = datetime.datetime.today()
-                user.book2Return = datetime.datetime.today() +datetime.timedelta(days=7)
-                user.No_Books += 1 
+            elif user.free == 2 or Book2.query.filter_by(id = userId).first() == None:
+                borrow = datetime.datetime.today()
+                returnd = datetime.datetime.today() +datetime.timedelta(days=7)
+                book = Book2(id = userId, book2 = book.title, book2Borrow = borrow , book2Return = returnd)
+                db.session.add(book)
+                user.No_Books += 1  
                 
-            elif user.No_Books == 2:
-                user.book3 = book.title
-                user.book3Borrow = datetime.datetime.today()
-                user.book3Return = datetime.datetime.today() +datetime.timedelta(days=7)
-                user.No_Books += 1 
+            elif user.No_Books == 2 or Book3.query.filter_by(id = userId).first() == None:
+                borrow = datetime.datetime.today()
+                returnd = datetime.datetime.today() +datetime.timedelta(days=7)
+                book = Book3(id = userId, book3 = book.title, book3Borrow = borrow , book3Return = returnd)
+                db.session.add(book)
+                user.No_Books += 1
             
             db.session.commit()
-
+            book = Book.query.get(bookId)
             book.count -= 1
             if book.count == 0:
                 book.status = "Not Available"
@@ -283,7 +312,12 @@ def return_book():
     if request.method == "POST":
         userId = request.form.get("userID")
         user = User.query.get(userId)
-        return render_template("return_book.html", user = user)
+        session["userID"] = userId
+        book1 = Book1.query.filter_by(id = userId).first()
+        book2 = Book2.query.filter_by(id = userId).first()
+        book3 = Book3.query.filter_by(id = userId).first()
+        
+        return render_template("return_book.html", user = user, book1 = book1, book2 = book2, book3 = book3)
     users = User.query.all()
     users.pop(0)
     return render_template("return_book.html", users = users)
@@ -293,8 +327,71 @@ def return_book():
 
 def return_book_submit():
     if request.method == "POST":
-        bookID = request.form.get("bookId")
-        flash(bookID, category="success")
-        redirect(url_for("views.home"))
-    return jsonify({})
-    
+        userID = session["userID"]
+        user = User.query.get(userID)
+        
+        book = request.form.get("book")
+        if Book1.query.filter_by(book1 = book).first() != None:
+            book1 = Book1.query.filter_by(book1 = book).first()
+            bookReturn = book1.book1Return
+            today = datetime.datetime.today()
+            diff = today - bookReturn
+            if diff.days > 0:
+                fine  = diff.days*15
+                finestr = "Pay A Fine Of "+str(fine)+" And Return The Book"
+                flash(finestr, category="error")
+            else:
+                
+                db.session.delete(book1)
+                user.No_Books = user.No_Books - 1
+                user.free = 1
+                Mbook = Book.query.filter_by(title = book).first()
+                Mbook.count = Mbook.count+1
+                if Mbook.count == 1:
+                    Mbook.status = "Available"
+                db.session.commit()
+                flash("Book Returned Successfully", category="success")
+
+        elif Book2.query.filter_by(book2 = book).first() != None:
+            book2 = Book2.query.filter_by(book2 = book).first()
+            bookReturn = book2.book2Return
+            today = datetime.datetime.today()
+            diff = today - bookReturn
+            if diff.days > 0 :
+                fine  = diff.days*15
+                finestr = "Pay A Fine Of "+str(fine)+" And Return The Book"
+                flash(finestr, category="error")
+            else:
+                db.session.delete(book2)
+                user.No_Books = user.No_Books - 1
+                user.free = 2
+                Mbook = Book.query.filter_by(title = book).first()
+                Mbook.count = Mbook.count+1
+                if Mbook.count == 1:
+                    Mbook.status = "Available"
+                db.session.commit()
+                flash("Book Returned Successfully", category="success")
+           
+
+        elif Book3.query.filter_by(book3 = book).first() != None:
+            book3 = Book3.query.filter_by(book3 = book).first()
+            bookReturn = book3.book3Return
+            today = datetime.datetime.today()
+            diff = today - bookReturn
+            if diff.days > 0 :
+                fine  = diff.days*15
+                finestr = "Pay A Fine Of "+str(fine)+" And Return The Book"
+                flash(finestr, category="error")
+            else:
+                db.session.delete(book3)
+                user.No_Books = user.No_Books - 1
+                user.free = 3
+                Mbook = Book.query.filter_by(title = book).first()
+                Mbook.count = Mbook.count+1
+                if Mbook.count == 1:
+                    Mbook.status = "Available"
+                db.session.commit()
+                flash("Book Returned Successfully", category="success")
+            return redirect(url_for("views.home"))
+
+    return redirect(url_for("views.home"))

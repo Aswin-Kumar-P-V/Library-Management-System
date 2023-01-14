@@ -40,7 +40,7 @@ def register():
         elif user:
             flash("User already exists", category= "error")
         else:
-            new_user = User(username = u_name, password = passw, No_Books = 0)
+            new_user = User(username = u_name, password = passw, No_Books = 0, free = 0)
             new_user.add()
             
     return render_template("register.html")

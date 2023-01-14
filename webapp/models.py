@@ -43,21 +43,32 @@ class User( db.Model, UserMixin):
     username = db.Column(db.String(150), unique = True)
     password = db.Column(db.String(150))
     books = db.relationship("Book")
-    book1 = db.Column(db.Integer)
-    book1Borrow = db.Column(db.DateTime)
-    book1Return = db.Column(db.DateTime)
-    book2 = db.Column(db.Integer)
-    book2Borrow = db.Column(db.DateTime)
-    book2Return = db.Column(db.DateTime)
-    book3 = db.Column(db.Integer)
-    book3Borrow = db.Column(db.DateTime)
-    book3Return = db.Column(db.DateTime)
     No_Books = db.Column(db.Integer)
+    free = db.Column(db.Integer)
     
     def add(self):
         db.session.add(self)
         db.session.commit()
         flash("Account created", category = "success")
+
+class Book1(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    book1 = db.Column(db.Integer)
+    book1Borrow = db.Column(db.DateTime)
+    book1Return = db.Column(db.DateTime)
+
+class Book2(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    book2 = db.Column(db.Integer)
+    book2Borrow = db.Column(db.DateTime)
+    book2Return = db.Column(db.DateTime)
+
+class Book3(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    book3 = db.Column(db.Integer)
+    book3Borrow = db.Column(db.DateTime)
+    book3Return = db.Column(db.DateTime)
+    
 
 class Category( db.Model):
     id = db.Column(db.Integer, primary_key = True)

@@ -37,15 +37,19 @@
       <p class="card-text">
         <form method = "POST" action = "return-book-submit" class = "form-control">
         <b>Username:<label class= "form-control"><b>{{user.username}}</b></label><br>
-        {% if user.book1 %}
-        <label>Book 1:</label>{{user.book1}}<button type="submit" class="btn btn-outline-primary align-content-end" value = {{user.book1}} id = "bookId" name = "bookId"><span aria-hidden = "true">✔️</span></button><br>
+        {% if book1 %}
+        <label>Book:</label>{{book1.book1}}<button type="submit" class="btn btn-outline-primary align-content-end" value = "{{book1.book1}}" id = "book" name = "book"><span aria-hidden = "true">✔️</span></button><br>
         {% endif %}
-        {% if user.book2 %}
-        <label>Book 2:</label>{{user.book2}}<button type="submit" class="btn btn-outline-primary align-content-end" value = {{user.book2}} id = "bookId" name = "bookId"><span aria-hidden = "true">✔️</span></button><br>
+
+        {% if book2 %}
+        <label>Book:</label>{{book2.book2}}<button type="submit" class="btn btn-outline-primary align-content-end" value = "{{book2.book2}}" id = "book" name = "book"><span aria-hidden = "true">✔️</span></button><br>
         {% endif %}
-        {% if user.book3 %}
-        <label>Book 3:</label>{{user.book3}}<button type="submit" class="btn btn-outline-primary align-content-end" value = {{user.book3}} id = "bookId" name = "bookId"><span aria-hidden = "true">✔️</span></button><br>
+        
+        {% if book3 %}
+  
+        <label>Book:</label>{{book3.book3}}<button type="submit" class="btn btn-outline-primary align-content-end" value = "{{book3.book3}}" id = "book" name = "book"><span aria-hidden = "true">✔️</span></button><br>
         {% endif %}
+        
     </form>
       </p>
       
