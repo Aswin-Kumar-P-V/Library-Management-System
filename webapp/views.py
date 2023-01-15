@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for, jsonify, session
-from .models import Book, User, Category, Book1, Book2, Book3
+from .models import Book, User, Category, Book1, Book2, Book3, Renew
 from . import db
 from flask_login import login_required, login_user, logout_user, current_user
 import json
@@ -271,21 +271,21 @@ def confirm_issue_book():
             user = User.query.get(userId)
             book = Book.query.get(bookId)
             
-            if user.free == 1 or Book1.query.filter_by(id = userId).first() == None:
+            if  Book1.query.filter_by(id = userId).first() == None:
                 borrow = datetime.datetime.today()
                 returnd = datetime.datetime.today() +datetime.timedelta(days=7)
                 book = Book1(id = userId, book1 = book.title, book1Borrow = borrow , book1Return = returnd)
                 db.session.add(book)
                 user.No_Books += 1  
                 
-            elif user.free == 2 or Book2.query.filter_by(id = userId).first() == None:
+            elif  Book2.query.filter_by(id = userId).first() == None:
                 borrow = datetime.datetime.today()
                 returnd = datetime.datetime.today() +datetime.timedelta(days=7)
                 book = Book2(id = userId, book2 = book.title, book2Borrow = borrow , book2Return = returnd)
                 db.session.add(book)
                 user.No_Books += 1  
                 
-            elif user.No_Books == 2 or Book3.query.filter_by(id = userId).first() == None:
+            elif Book3.query.filter_by(id = userId).first() == None:
                 borrow = datetime.datetime.today()
                 returnd = datetime.datetime.today() +datetime.timedelta(days=7)
                 book = Book3(id = userId, book3 = book.title, book3Borrow = borrow , book3Return = returnd)
@@ -329,8 +329,8 @@ def return_book_submit():
     if request.method == "POST":
         userID = session["userID"]
         user = User.query.get(userID)
-        
         book = request.form.get("book")
+        
         if Book1.query.filter_by(book1 = book).first() != None:
             book1 = Book1.query.filter_by(book1 = book).first()
             bookReturn = book1.book1Return
@@ -395,3 +395,74 @@ def return_book_submit():
             return redirect(url_for("views.home"))
 
     return redirect(url_for("views.home"))
+
+@views.route("/student-account", methods = ["POST", "GET"])
+@login_required
+
+def account():
+    user = current_user
+    book1 = Book1.query.get(user.id)
+    book2 = Book2.query.get(user.id)
+    book3 = Book3.query.get(user.id)
+    date = datetime.datetime.today()
+
+    if request.method == "POST":
+        book = request.form.get("bookID")
+        xistReq = Renew.query.filter_by(id =  user.id, book = book).first()
+        if xistReq != None:
+            flash("Request Already Exists", category="error")
+            return render_template("student_account.html", user = current_user, book1 = book1, book2 = book2, book3 = book3, date = date)
+        newRequest = Renew(id = user.id, book = book)
+        db.session.add(newRequest)
+        db.session.commit()
+        flash("Renew Request Submitted", category="success")
+        return render_template("student_account.html", user = current_user, book1 = book1, book2 = book2, book3 = book3, date = date)
+        
+    return render_template("student_account.html", user = current_user, book1 = book1, book2 = book2, book3 = book3, date = date)
+
+@views.route("/Renew-Requests", methods = ["POST", "GET"])
+@login_required
+
+def renew_request():
+    requests = Renew.query.all()
+    return render_template("renew_requests.html", requests =  requests)
+
+@views.route("/Decline-Requests", methods = ["POST", "GET"])
+@login_required
+
+def del_request():
+    if request.method == "POST":
+        request1 = request.form.get("delID")
+        req = Renew.query.get(request1)
+        db.session.delete(req)
+        db.session.commit()
+        flash("Request Removed Successfully", category= "success")
+    return redirect(url_for("views.renew_request"))
+
+@views.route("/Approve-Requests", methods = ["POST", "GET"])
+@login_required
+
+def app_request():
+    if request.method == "POST":
+        request1 = request.form.get("appID")
+        req = Renew.query.get(request1)
+        if Book1.query.filter_by(id = req.id, book1 = req.book).first():
+            book = Book1.query.filter_by(id = req.id, book1 = req.book).first()
+            date = book.book1Return
+            date = date + datetime.timedelta(days = 3)
+            book.book1Return = date
+        elif Book2.query.filter_by(id = req.id, book2 = req.book).first():
+            book = Book2.query.filter_by(id = req.id, book2 = req.book).first()
+            date = book.book2Return
+            date = date + datetime.timedelta(days = 3)
+            book.book2Return = date
+        elif Book3.query.filter_by(id = req.id, book3 = req.book).first():
+            book = Book3.query.filter_by(id = req.id, book3 = req.book).first()
+            date = book.book3Return
+            date = date + datetime.timedelta(days = 3)
+            book.book3Return = date
+        db.session.delete(req)
+        db.session.commit()
+        
+        flash("Book Renewed", category= "success")
+    return redirect(url_for("views.renew_request"))

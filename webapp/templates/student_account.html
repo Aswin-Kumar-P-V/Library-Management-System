@@ -1,0 +1,60 @@
+{% extends "base.html"%}
+{% block title%} Account {% endblock %}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "Home" href="/home">Home</a>{%endblock%}
+{%block content%}
+
+<div class = "my-4">
+
+    <div class = "container my-3">
+        <div class = "row">
+            <div class = "col-4">
+            </div>
+            <div class = "col-4">
+                
+                <div class="card" style="width: 25rem;">
+                    <img src="static/account.gif" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <b>User Name:{{user.username}}</b>
+                      <p class="card-text">
+                        <form method = "POST" action="/student-account">
+                        <table class="table my-5">
+                            <thead>
+                              <tr class= "table-dark">
+                                <th scope="col">Book</th>
+                                <th scope="col">Renew Book</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            {% if book1 %}
+                            <tr>
+                                <th scope="col">{{book1.book1}}</th>
+                                <th scope="col">{% if date.day < book1.book1Return.day %}
+                                    <button type = "submit" class="btn btn-outline-dark" id = "bookID" name = "bookID" value = "{{book1.book1}}">Renew</button>
+                                    {% else %} <i>Not renewable</i>
+                                    {% endif %}</th>
+                              </tr>
+                            {% endif %}
+                            {% if book2 %}
+                            <tr>
+                                <th scope="col">{{book2.book2}}</th>
+                                <th scope="col">{% if date.day < book2.book2Return.day %}
+                                    <button type = "submit" class="btn btn-outline-dark" id = "bookID" name = "bookID" value = "{{book2.book2}}">Renew</button>
+                                    {% else %} <i>Not renewable</i>
+                                    {% endif %}</th>
+                              </tr>
+                            {% endif %}
+                            {% if book3 %}
+                            <tr>
+                                <th scope="col">{{book3.book3}}</th>
+                                <th scope="col">{% if date.day < book3.book3Return.day %}
+                                    <button type = "submit" class="btn btn-outline-dark" id = "bookID" name = "bookID" value = "{{book3.book3}}">Renew</button>
+                                    {% else %} <i>Not renewable</i>
+                                    {% endif %}</th>
+                              </tr>
+                            {% endif %}
+                      </p>
+                    </form>
+                    </div>
+                  </div>
+</div>
+{% endblock %}

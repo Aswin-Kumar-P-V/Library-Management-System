@@ -1,0 +1,34 @@
+{% extends "base.html"%}
+{% block title%} Renew Requests {% endblock %}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "Home" href="/">Home</a>{%endblock%}
+{%block content%}
+{% if requests  %}
+<div class = "container my-5">
+            <table class="table my-5">
+                <thead>
+                  <tr class= "table-dark">
+                    <th scope="col">User ID</th>
+                    <th scope="col">Book Name</th>
+                    <th scope="col">Approve</th>
+                    <th scope="col">Decline</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    <tr>
+                        <td>{{request.id}}</td>
+                        <td>{{request.book}}</td>
+                        <td>
+                            <form method = "POST" action= "/Approve-Requests">
+                            <button type="submit" class="btn btn-outline-success align-content-end" value = "{{request.sl_no}}" id= "appID" name = "appID"><span aria-hidden = "true">✔️</span></button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method = "POST" action= "/Decline-Requests">
+                            <button type="submit" class="btn btn-outline-danger align-content-end" value = "{{request.sl_no}}" id= "delID" name = "delID"><span aria-hidden = "true">&times;</span></button>
+                            </form>
+                        </td>
+                    {% endfor %}
+                    </form>
+{% endif %}
+{%endblock%}

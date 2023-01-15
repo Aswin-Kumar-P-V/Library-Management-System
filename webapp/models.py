@@ -83,3 +83,8 @@ class Librarian( db.Model, UserMixin):
     id = db.Column(db.Integer,  primary_key = True)
     username = db.Column(db.String(150), unique = True)
     password = db.Column(db.String(150))
+
+class Renew( db.Model ):
+    sl_no = db.Column(db.Integer,  primary_key = True)
+    id = db.Column(db.Integer)
+    book = db.Column(db.String(150))
