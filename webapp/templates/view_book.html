@@ -27,7 +27,7 @@
         <td>{{book.publication_year.date()}}</td>
         <td>{{book.category}}</td>
         <td>{{book.status}}</td>
-        <td></td>
+        <td><form action = "/Update-Book" method = "POST"><button type = "submit" id = "bookid" name = "bookid" value = "{{book.id}}" class = "btn btn-outline-primary">Update</button></form></td>
         <td>
             <button type="button" class="btn btn-outline-danger align-content-end" onclick = "deleteBook({{book.id}})"><span aria-hidden = "true">&times;</span></button></td>
       </tr>

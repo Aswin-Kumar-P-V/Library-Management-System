@@ -1,7 +1,38 @@
 {% extends "base.html"%}
-{% block title%}Add Book{%endblock%}
+{% block title%}Return Book Fine{%endblock%}
 {%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
 {%block content%}
-{% if tye %}hello{% endif %}
-{{ty}}
+<div class = "container my-5">
+    <div class = "row">
+        <div class = "col-4">
+        </div>
+        <div class = "col-4">
+            <div class="card" style="width: 20rem;">
+                <img src="static/fine.gif" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title"></h5>
+                  <p class="card-text">
+                    <form action = "/Return-book-fine" method = "POST">
+                        <div class="mb-3">
+                            <label  class="form-label">UserID:</label><input type="text" class="form-control" id="userID" name = "userID" value = "{{userid}}" readonly>
+                          </div>
+                        <div class="mb-3">
+                          <label  class="form-label">Username:</label><input type="text" class="form-control" id="user" name = "user" value = "{{user}}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label  class="form-label">Book:</label><input type="text" class="form-control" id="book" name = "book" value = "{{book}}" readonly>
+                          </div>
+                          <div class="mb-3">
+                            <label  class="form-label">Days Exceeded:</label><input type="text" class="form-control" id="return" name = "return" value = "{{days}}" readonly>
+                          </div>
+                          <div class="mb-3">
+                            <label  class="form-label">Fine Amount:</label><input type="text" class="form-control" id="return" name = "return" value = "{{days*15}}" readonly>
+                          </div>
+
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                      </form>
+                  </p>
+                  
+                </div>
+              </div>
 {% endblock%}

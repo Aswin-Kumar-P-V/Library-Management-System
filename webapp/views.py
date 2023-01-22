@@ -11,7 +11,7 @@ views = Blueprint("views", __name__)
 @views.route("/")
 @login_required
 def home():
-    # book =  Book1.query.get(2)
+    # book =  Book1.query.get(3)
     # date = datetime.datetime.today()
     # book.book1Return = date + datetime.timedelta(days=-5)
     # db.session.commit()
@@ -331,15 +331,14 @@ def return_book_submit():
         user = User.query.get(userID)
         book = request.form.get("book")
         
-        if Book1.query.filter_by(book1 = book).first() != None:
-            book1 = Book1.query.filter_by(book1 = book).first()
+        if Book1.query.filter_by(id =  user.id, book1 = book).first() != None:
+            book1 = Book1.query.filter_by(id =  user.id, book1 = book).first()
             bookReturn = book1.book1Return
             today = datetime.datetime.today()
             diff = today - bookReturn
             if diff.days > 0:
                 fine  = diff.days*15
-                finestr = "Pay A Fine Of "+str(fine)+" And Return The Book"
-                flash(finestr, category="error")
+                return render_template("return_fine.html", fine = fine, user = user.username, book = book1.book1,days = diff.days, userid = user.id)
             else:
                 
                 db.session.delete(book1)
@@ -352,15 +351,14 @@ def return_book_submit():
                 db.session.commit()
                 flash("Book Returned Successfully", category="success")
 
-        elif Book2.query.filter_by(book2 = book).first() != None:
-            book2 = Book2.query.filter_by(book2 = book).first()
+        elif Book2.query.filter_by(id =  user.id, book2 = book).first() != None:
+            book2 = Book2.query.filter_by(id =  user.id, book2 = book).first()
             bookReturn = book2.book2Return
             today = datetime.datetime.today()
             diff = today - bookReturn
             if diff.days > 0 :
                 fine  = diff.days*15
-                finestr = "Pay A Fine Of "+str(fine)+" And Return The Book"
-                flash(finestr, category="error")
+                return render_template("return_fine.html", fine = fine, user = user.username, book = book2.book2,days = diff.days, userid = user.id)
             else:
                 db.session.delete(book2)
                 user.No_Books = user.No_Books - 1
@@ -373,15 +371,14 @@ def return_book_submit():
                 flash("Book Returned Successfully", category="success")
            
 
-        elif Book3.query.filter_by(book3 = book).first() != None:
-            book3 = Book3.query.filter_by(book3 = book).first()
+        elif Book3.query.filter_by(id =  user.id, book3 = book).first() != None:
+            book3 = Book3.query.filter_by(id =  user.id, book3 = book).first()
             bookReturn = book3.book3Return
             today = datetime.datetime.today()
             diff = today - bookReturn
             if diff.days > 0 :
                 fine  = diff.days*15
-                finestr = "Pay A Fine Of "+str(fine)+" And Return The Book"
-                flash(finestr, category="error")
+                return render_template("return_fine.html", fine = fine, user = user.username, book = book3.book3,days = diff.days, userid = user.id)
             else:
                 db.session.delete(book3)
                 user.No_Books = user.No_Books - 1
@@ -466,3 +463,91 @@ def app_request():
         
         flash("Book Renewed", category= "success")
     return redirect(url_for("views.renew_request"))
+
+@views.route("/Return-book-fine", methods = ["POST", "GET"])
+@login_required
+
+def returnBookFine():
+    if request.method == "POST":
+        book = request.form.get("book")
+        userID= request.form.get("userID")
+        user = User.query.get(userID)
+
+        if Book1.query.filter_by(id =  userID, book1 = book).first() != None:
+            book1 = Book1.query.filter_by(id =  userID, book1 = book).first()
+            db.session.delete(book1)
+            user.No_Books = user.No_Books - 1
+            user.free = 1
+            Mbook = Book.query.filter_by(title = book).first()
+            Mbook.count = Mbook.count+1
+            if Mbook.count == 1:
+                Mbook.status = "Available"
+            db.session.commit()
+
+        elif Book2.query.filter_by(id =  userID, book2 = book).first() != None:
+            book2 = Book2.query.filter_by(id =  userID, book2 = book).first()
+            db.session.delete(book2)
+            user.No_Books = user.No_Books - 1
+            user.free = 2
+            Mbook = Book.query.filter_by(title = book).first()
+            Mbook.count = Mbook.count+1
+            if Mbook.count == 1:
+                Mbook.status = "Available"
+            db.session.commit()
+
+        elif Book3.query.filter_by(id =  userID, book3 = book).first() != None:
+            book3 = Book3.query.filter_by(id =  userID, book3 = book).first()
+            db.session.delete(book3)
+            user.No_Books = user.No_Books - 1
+            user.free = 3
+            Mbook = Book.query.filter_by(title = book).first()
+            Mbook.count = Mbook.count+1
+            if Mbook.count == 1:
+                Mbook.status = "Available"
+            db.session.commit()
+
+        return redirect(url_for("views.home"))
+    return redirect(url_for("views.home"))
+
+@views.route("/Update-Book", methods = ["POST", "GET"])
+@login_required
+
+def updatebook():
+    if request.method == "POST":
+        bookid = request.form.get("bookid")
+        book = Book.query.get(bookid)
+        allcat = Category.query.all()
+        date = book.publication_year.date()
+    return render_template("update_book.html", book = book, allcat = allcat, date = date)
+
+@views.route("/Update-Book-Submit", methods = ["POST", "GET"])
+@login_required
+
+def UpdateBook():
+    if request.method == "POST":
+        b_id = request.form.get("b_id")
+        b_name = request.form.get("b_name")
+        b_auth = request.form.get("b_author")
+        b_publisher = request.form.get("b_publisher")
+        b_publication = request.form.get("b_publication")
+        b_p_year = datetime.datetime.strptime(b_publication, '%Y-%m-%d')
+        b_cat = request.form.get("cat")
+        b_count = request.form.get("b_no")
+        check_book = Book.query.filter_by(title = b_name).first()
+        book = Book.query.get(b_id)
+        if check_book and check_book.id != book.id:
+            flash("Book Name already exists", category="error")
+            return redirect(url_for("views.view_books"))
+
+        book.title, book.author, book.publisher, book.publication_year, book.category, book.count = b_name, b_auth, b_publisher, b_p_year, b_cat, b_count
+        db.session.commit()
+
+        book = Book.query.get(b_id)
+        if book.count == 0:
+            book.status = "Not Available"
+        else:
+            book.status = "Available"
+        db.session.commit()
+        
+    flash("Book Details Updated", category="success")
+    return redirect(url_for("views.home"))

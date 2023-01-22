@@ -1,0 +1,57 @@
+{% extends "base.html"%}
+{% block title%}Update Book{%endblock%}
+{%block nav1%}<a class="nav-item nav-link" id = "home" name = "home" href="/">Home</a>{%endblock%}
+{%block content%}
+<div class = "container my-5">
+    <div class = "row">
+        <div class = "col-4">
+        </div>
+        <div class = "col-4">
+            <div class="card" style="width: 18rem;">
+                <img src="static/AddBook.gif" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Update Book Details</h5>
+                  <p class="card-text">
+                    <form method = 'POST' action= "/Update-Book-Submit">
+                      <div class="mb-3">
+                        <label for="b_name" class="form-label">Book ID</label>
+                        <input type="number" Required class="form-control" maxlength = "200" id="b_id" name="b_id" aria-describedby="emailHelp" placeholder = "Book ID" value = "{{book.id}}" readonly>
+                      </div>
+                        <div class="mb-3">
+                            <label for="b_name" class="form-label">Book Title</label>
+                            <input type="text" Required class="form-control" maxlength = "200" id="b_name" name="b_name" aria-describedby="emailHelp" placeholder = "Book Title" value = "{{book.title}}">
+                          </div>
+                          <div class="mb-3">
+                            <label for="b_author" class="form-label">Author</label>
+                            <input type="text" Required class="form-control" maxlength = "200" id="b_author" name="b_author" aria-describedby="emailHelp" placeholder = "Author" value = "{{book.author}}">
+                          </div>
+                          <div class="mb-3">
+                            <label for="b_publisher" class="form-label">Publisher</label>
+                            <input type="text" Required class="form-control" maxlength = "200" id="b_publisher" name="b_publisher" aria-describedby="emailHelp" placeholder = "Publisher" value = "{{book.publisher}}">
+                          </div>
+                          <div class="mb-3">
+                            <label for="b_publication" class="form-label">Publication Date</label>
+                            <input type="date" Required class="form-control" id="b_publication" name="b_publication" aria-describedby="emailHelp" placeholder = "Publication" value = "{{date}}">
+                          </div>
+                          <div class="mb-3">
+                            <label for="b_publication" class="form-label">Number Of Books</label>
+                            <input type="number" Required class="form-control" id="b_no" name="b_no" aria-describedby="emailHelp" placeholder = "Number Of Books" min = "0" value = "{{book.count}}">
+                          </div>
+                          <div class="mb-3">
+                            <label for="b_cat" class="form-label">Category</label>
+                            <select Required class="form-control" name="cat" id="cat">
+                            <option value = "{{book.category}}">{{book.category}}</option>
+                            {% for cat in allcat%}
+                            {% if cat.Category != book.category %}
+                            <option value="{{cat.Category}}">{{cat.Category}}</option>
+                            {% endif %}
+                            {%endfor%}
+                            </select>
+                          </div>  
+                        <button type="submit" class="btn btn-outline-dark">Add Book</button>
+              </form>
+                  </p>
+                  
+                </div>
+              </div>
+{% endblock %}
